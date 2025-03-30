@@ -10,4 +10,8 @@ class TypeMedicament extends Model
     use HasFactory;
 
     protected $fillable = ['nom_type'];
+
+    protected function medicaments(){
+        return $this->hasMany(Medicament::class);
+    }
 }

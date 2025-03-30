@@ -14,7 +14,6 @@ class PatientController extends Controller
     {
         $patients = Patient::all();
         return view("patients.index",compact("patients"));
-        
     }
 
     /**
@@ -30,7 +29,14 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Patient::create([
+            "nom"=> $request->nom,
+            "prenom"=> $request->prenom,
+            "sexe"=> $request->sexe?'Homme':'Femme',
+            "date_naissance"=> $request->date_naissance,
+            "adresse"=> $request->adresse,
+        ]);
+        return redirect()->route("patients.index")->with("success","");
     }
 
     /**
@@ -44,25 +50,34 @@ class PatientController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Patient $patient)
+    public function edit($id)
     {
-        return view("patients.modify");
-        
+        $patient = Patient::find($id);
+        return view("patients.modify",compact("patient"));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Patient $patient)
+    public function update(Request $request, $id)
     {
-        //
+        $patient = Patient::find($id);
+        $patient->update([
+            "nom"=> $request->nom,
+            "prenom"=> $request->prenom,
+            "sexe"=> $request->sexe?'Homme':'Femme',
+            "date_naissance"=> $request->date_naissance,
+            "adresse"=> $request->adresse,
+        ]);
+        return redirect()->route("patients.index")->with("success","");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Patient $patient)
+    public function destroy($id)
     {
-        //
+        Patient::find($id)->delete();
+        return redirect()->route("patients.index")->with("success","");
     }
 }

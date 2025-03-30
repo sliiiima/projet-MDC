@@ -13,7 +13,7 @@ class MedicamentController extends Controller
     public function index()
     {
         $medicaments = Medicament::all();
-        return view("medicaments.create", compact("medicaments"));
+        return view("medicaments.index", compact("medicaments"));
         
     }
 
@@ -31,7 +31,15 @@ class MedicamentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Medicament::create([
+            "nom"=> $request->nom,
+            "description"=> $request->description,
+            "type_medicament_id"=> $request->type_medicament_id,
+            "Est_active"=>$request->est_active?true:false,
+            "qte_alerte"=>$request->qte_alerte,
+            "qte_initial"=>$request->qte_initial,
+        ]);
+        return redirect()->route("medicaments.index")->with("success","");
     }
 
     /**
@@ -39,31 +47,40 @@ class MedicamentController extends Controller
      */
     public function show(Medicament $medicament)
     {
-        return view("medicaments.medicament");
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Medicament $medicament)
+    public function edit($id)
     {
-        return view("medicaments.create");
+        $medicament = Medicament::findOrFail($id);
+        return view("medicaments.modify", compact("medicament"));
         
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Medicament $medicament)
+    public function update(Request $request, $id)
     {
-        //
+        Medicament::find($id)->update([
+            "nom"=> $request->nom,
+            "description"=> $request->description,
+            "type_medicament_id"=> $request->type_medicament_id,
+            "Est_active"=>$request->est_active?true:false,
+            "qte_alerte"=>$request->qte_alerte,
+            "qte_initial"=>$request->qte_initial,
+        ]);
+        return redirect()->route("medicaments.index")->with("success","");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Medicament $medicament)
+    public function destroy($id)
     {
-        //
+        Medicament::find($id)->delete();
+        return redirect()->route("medicaments.index")->with("success","");
     }
 }

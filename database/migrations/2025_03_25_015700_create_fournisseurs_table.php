@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('medicament_id')->constraind();
             $table->integer('qte_recue');
-            $table->date('date_recu');
+            $table->date('date_recue');
             $table->timestamps();
         });
     }

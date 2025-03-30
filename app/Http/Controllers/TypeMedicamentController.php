@@ -12,8 +12,8 @@ class TypeMedicamentController extends Controller
      */
     public function index()
     {
-        $types_medicaments = TypeMedicament::all();
-        return view("types-medicaments.index", compact("type_medicaments"));
+        $types = TypeMedicament::all();
+        return view("types-medicaments.index", compact("types"));
     }
 
     /**
@@ -29,7 +29,8 @@ class TypeMedicamentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        TypeMedicament::create($request->all());
+        return redirect()->route("types-medicaments.index")->with("success","");
     }
 
     /**
@@ -45,7 +46,6 @@ class TypeMedicamentController extends Controller
      */
     public function edit(TypeMedicament $typeMedicament)
     {
-        return view("types-medicaments.modify");
     }
 
     /**
@@ -59,8 +59,9 @@ class TypeMedicamentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TypeMedicament $typeMedicament)
+    public function destroy($id)
     {
-        //
+        TypeMedicament::find( $id )->delete();
+        return redirect()->route("types-medicaments.index")->with("success","");
     }
 }

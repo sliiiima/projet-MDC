@@ -14,10 +14,10 @@
                     Medicament
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    quantite recu
+                    quantite recue
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    date recu
+                    date recue
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Action
@@ -27,18 +27,22 @@
         <tbody>
             @forelse ($fournisseurs as $fourn)
             <tr class="odd:bg-white odd:even:bg-gray-50 even:border-b border-gray-200">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                    {{ $fourn->medicament }}
+                <th class="px-6 py-4">
+                    {{ $fourn->medicament->nom }}
                 </th>
                 <td class="px-6 py-4">
-                    {{ $fourn->qte_recuu }}
+                    {{ $fourn->qte_recue }}
                 </td>
                 <td class="px-6 py-4">
-                    {{ $fourn->date_recu }}
+                    {{ $fourn->date_recue }}
                 </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                    <a href="#" class="font-medium text-red-600 hover:underline">Delete</a>
+                <td class="px-6 py-4 flex gap-2">
+                    <a href="{{ route('fournisseurs.edit',$fourn->id) }}" class="font-medium text-blue-600 hover:underline">Edit</a>
+                    <form action="{{ route('fournisseurs.destroy',$fourn->id) }}" method="post">
+                        @csrf
+                        @method('delete')
+                        <button class="font-medium text-red-600 hover:underline cursor-pointer">Delete</button>
+                    </form>
                 </td>
             </tr>
             @empty
