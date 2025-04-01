@@ -21,7 +21,7 @@
                         type
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Est active
+                        Statut
                     </th>
                     <th scope="col" class="px-6 py-3">
                         quantite alert
@@ -47,8 +47,13 @@
                             {{ $medicament->type->nom_type }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $medicament->est_active?'oui':'non' }}
+                            @if($medicament->est_active)
+                            <i class="fa-solid fa-circle text-green-500 text-xs"></i>
+                            @else
+                                <i class="fa-solid fa-circle text-red-500 text-xs"></i>
+                            @endif
                         </td>
+
                         <td class="px-6 py-4">
                             {{ $medicament->qte_alerte }}
                         </td>
@@ -57,11 +62,17 @@
                         </td>
                         <td class="px-6 py-4 flex gap-2">
                             <a href="{{ route('medicaments.edit', $medicament->id) }}"
-                                class="font-medium text-blue-600 hover:underline">Edit</a>
+                                class="flex items-center gap-2 font-medium text-blue-600 hover:underline">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+
                             <form action="{{ route('medicaments.destroy', $medicament->id) }}" method="post">
                                 @csrf
                                 @method('delete')
-                                <button class="font-medium text-red-600 hover:underline cursor-pointer">Delete</button>
+                                <button
+                                    class="flex items-center gap-2 font-medium text-red-600 hover:underline cursor-pointer mr-4">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>
