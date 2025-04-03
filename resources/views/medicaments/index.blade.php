@@ -47,13 +47,14 @@
                             {{ $medicament->type->nom_type }}
                         </td>
                         <td class="px-6 py-4">
-                            @if($medicament->est_active)
-                            <i class="fa-solid fa-circle text-green-500 text-xs"></i>
+                            @if($medicament->qte_initial>$medicament->qte_alerte)
+                                <i class="fa-solid fa-circle text-green-500 text-xs"></i>
+                            @elseif(0<$medicament->qte_initial && $medicament->qte_initial<=$medicament->qte_alerte)
+                                <i class="fa-solid fa-circle text-orange-500 text-xs"></i>
                             @else
                                 <i class="fa-solid fa-circle text-red-500 text-xs"></i>
                             @endif
                         </td>
-
                         <td class="px-6 py-4">
                             {{ $medicament->qte_alerte }}
                         </td>

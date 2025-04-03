@@ -14,7 +14,7 @@ class OrdonnanceController extends Controller
      */
     public function index()
     {
-        $ordonnances = Ordonnance::with(['patient', 'ordonnanceMedicaments.medicament'])
+        $ordonnances = Ordonnance::with(['patient', 'detailMedicaments.medicament'])
             ->latest()
             ->paginate(10);
 
@@ -39,25 +39,25 @@ class OrdonnanceController extends Controller
     {
         $request->validate([
             'patient_id' => 'required|exists:patients,id',
-            'date_ordonnance' => 'required|date',
+            'date_donnee' => 'required|date',
             'medicaments' => 'required|array',
             'medicaments.*.id' => 'required|exists:medicaments,id',
             'medicaments.*.quantite' => 'required|integer|min:1',
             'instructions' => 'nullable|string|max:1000',
-            'statut' => 'required|in:active,completed,cancelled'
+            'etat' => 'required|in:completed,incompleted'
         ]);
 
         $ordonnance = Ordonnance::create([
             'patient_id' => $request->patient_id,
-            'date_ordonnance' => $request->date_ordonnance,
+            'date_donnee' => $request->date_donnee,
             'instructions' => $request->instructions,
-            'statut' => $request->statut
+            'etat' => $request->etat == 'completed' ? true : false,
         ]);
 
         foreach ($request->medicaments as $medicament) {
-            $ordonnance->ordonnanceMedicaments()->create([
+            $ordonnance->detailMedicaments()->create([
                 'medicament_id' => $medicament['id'],
-                'quantite' => $medicament['quantite']
+                'qte_donnee' => $medicament['qte_donnee']
             ]);
         }
 
