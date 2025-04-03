@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Patient extends Model
 {
     use HasFactory;
-    protected $fillable = ['nom', 'prenom', 'date_naissance', 'sexe', 'adresse'];
+    //protected $fillable = ['nom', 'prenom', 'date_naissance', 'sexe', 'adresse'];
+    protected $guarded = ['id'];
 
     public function ordonnances()
     {

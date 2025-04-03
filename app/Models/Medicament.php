@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Medicament extends Model
 {
     use HasFactory;
-    protected $fillable = ['nom', 'description', 'type_medicament_id', 'Est_active', 'qte_alerte', 'qte_initial'];
+    //protected $fillable = ['nom', 'description', 'type_medicament_id', 'Est_active', 'qte_alerte', 'qte_initial'];
+    protected $guarded = ['id'];
 
     public function type()
     {

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ordonnance;
+use App\Models\Patient;
+use App\Models\Medicament;
 use Illuminate\Http\Request;
 
 class OrdonnanceController extends Controller
@@ -12,8 +14,11 @@ class OrdonnanceController extends Controller
      */
     public function index()
     {
-        $ordonnances =Ordonnance::all();
-        return view("ordonnances.index", compact("ordonnaces"));
+        $ordonnances = Ordonnance::with(['patient', 'ordonnanceMedicaments.medicament'])
+            ->latest()
+            ->paginate(10);
+
+        return view('ordonnances.index', compact('ordonnances'));
     }
 
     /**
@@ -21,8 +26,10 @@ class OrdonnanceController extends Controller
      */
     public function create()
     {
-        return view("ordonnances.create");
-        
+        $patients = Patient::orderBy('nom')->get();
+        $medicaments = Medicament::orderBy('nom')->get();
+
+        return view('ordonnances.create', compact('patients', 'medicaments'));
     }
 
     /**
@@ -30,7 +37,32 @@ class OrdonnanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'patient_id' => 'required|exists:patients,id',
+            'date_ordonnance' => 'required|date',
+            'medicaments' => 'required|array',
+            'medicaments.*.id' => 'required|exists:medicaments,id',
+            'medicaments.*.quantite' => 'required|integer|min:1',
+            'instructions' => 'nullable|string|max:1000',
+            'statut' => 'required|in:active,completed,cancelled'
+        ]);
+
+        $ordonnance = Ordonnance::create([
+            'patient_id' => $request->patient_id,
+            'date_ordonnance' => $request->date_ordonnance,
+            'instructions' => $request->instructions,
+            'statut' => $request->statut
+        ]);
+
+        foreach ($request->medicaments as $medicament) {
+            $ordonnance->ordonnanceMedicaments()->create([
+                'medicament_id' => $medicament['id'],
+                'quantite' => $medicament['quantite']
+            ]);
+        }
+
+        return redirect()->route('ordonnances.show', $ordonnance)
+            ->with('success', 'Prescription created successfully.');
     }
 
     /**
@@ -38,7 +70,9 @@ class OrdonnanceController extends Controller
      */
     public function show(Ordonnance $ordonnance)
     {
-        //
+        $ordonnance->load(['patient', 'ordonnanceMedicaments.medicament']);
+
+        return view('ordonnances.show', compact('ordonnance'));
     }
 
     /**
@@ -46,7 +80,11 @@ class OrdonnanceController extends Controller
      */
     public function edit(Ordonnance $ordonnance)
     {
-        return view("ordonnances.medify");
+        $patients = Patient::orderBy('nom')->get();
+        $medicaments = Medicament::orderBy('nom')->get();
+        $ordonnance->load('ordonnanceMedicaments');
+
+        return view('ordonnances.edit', compact('ordonnance', 'patients', 'medicaments'));
     }
 
     /**
@@ -54,7 +92,36 @@ class OrdonnanceController extends Controller
      */
     public function update(Request $request, Ordonnance $ordonnance)
     {
-        //
+        $request->validate([
+            'patient_id' => 'required|exists:patients,id',
+            'date_ordonnance' => 'required|date',
+            'medicaments' => 'required|array',
+            'medicaments.*.id' => 'required|exists:medicaments,id',
+            'medicaments.*.quantite' => 'required|integer|min:1',
+            'instructions' => 'nullable|string|max:1000',
+            'statut' => 'required|in:active,completed,cancelled'
+        ]);
+
+        $ordonnance->update([
+            'patient_id' => $request->patient_id,
+            'date_ordonnance' => $request->date_ordonnance,
+            'instructions' => $request->instructions,
+            'statut' => $request->statut
+        ]);
+
+        // Delete existing medications
+        $ordonnance->ordonnanceMedicaments()->delete();
+
+        // Add new medications
+        foreach ($request->medicaments as $medicament) {
+            $ordonnance->ordonnanceMedicaments()->create([
+                'medicament_id' => $medicament['id'],
+                'quantite' => $medicament['quantite']
+            ]);
+        }
+
+        return redirect()->route('ordonnances.show', $ordonnance)
+            ->with('success', 'Prescription updated successfully.');
     }
 
     /**
@@ -62,6 +129,10 @@ class OrdonnanceController extends Controller
      */
     public function destroy(Ordonnance $ordonnance)
     {
-        //
+        $ordonnance->ordonnanceMedicaments()->delete();
+        $ordonnance->delete();
+
+        return redirect()->route('ordonnances.index')
+            ->with('success', 'Prescription deleted successfully.');
     }
 }
