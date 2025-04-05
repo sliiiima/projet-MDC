@@ -98,7 +98,7 @@
             </ul>
         </div>
     </div>
-    <div class="my-6 flex py-10">
+    <div class="grid grid-cols-2 gap-5">
         <table class="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
             <thead>
                 <tr>
@@ -122,8 +122,6 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
-    <div class="my-6 flex py-10">
         <table class="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
             <thead>
                 <tr>
