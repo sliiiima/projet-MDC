@@ -70,7 +70,7 @@
         <table class="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
             <thead>
                 <tr>
-                    <th colspan="3" class="px-6 py-4 text-xl font-semibold text-center text-white bg-green-500">medicament
+                    <th colspan="3" class="px-6 py-4 text-xl font-semibold text-center text-white bg-orange-400">medicament en alert
                         ({{ \App\Models\Medicament::where('qte_initial', '<', \DB::raw('qte_alerte'), 'and')->where('qte_initial', '>', 0)->count() }})
                     </th>
                 </tr>
@@ -90,24 +90,20 @@
                 @endforeach
             </tbody>
         </table>
-        <table class="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
+        <table class="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg overflow-hidden text-center">
             <thead>
                 <tr>
-                    <th colspan="3" class="px-6 py-4 text-xl font-semibold text-center text-white bg-red-500">medicament
+                    <th colspan="3" class="px-6 py-4 text-xl font-semibold text-center text-white bg-red-500">medicament vide
                         ({{ \App\Models\Medicament::where('qte_initial', '=', 0)->count() }})</th>
                 </tr>
                 <tr>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 bg-gray-100">medicament</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 bg-gray-100">alert</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 bg-gray-100">initial</th>
+                    <th class="px-6 py-3 text-center text-sm font-medium text-gray-700 bg-gray-100">Nom</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (\App\Models\Medicament::where('qte_initial', '=', 0)->get() as $medicament)
                     <tr class="border-t hover:bg-gray-50">
                         <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->nom}}</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->qte_alerte}}</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->qte_initial}}</td>
                     </tr>
                 @endforeach
             </tbody>

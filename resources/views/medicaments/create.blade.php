@@ -27,8 +27,8 @@
                 </select>
             </div>
         </div>
-        <div class="grid gap-6 mb-6 md:grid-cols-3">
-            <div>
+        <div class="grid gap-6 mb-6 md:grid-cols-2">
+            {{-- <div>
                 <label for="est_active" class="block mb-2 text-sm font-medium text-gray-900 ">Est active</label>
                 <label class="inline-flex items-center justify-center cursor-pointer mt-2 w-full">
                     <span class="ms-3 text-sm font-medium text-gray-900 pr-4 pb-1">Non</span>
@@ -38,7 +38,7 @@
                     </div>
                     <span class="ms-3 text-sm font-medium text-gray-900 pb-1">Oui</span>
                 </label>
-            </div>
+            </div> --}}
             <div>
                 <label for="qte_alerte" class="block mb-2 text-sm font-medium text-gray-900 ">Quantite Alerte</label>
                 <input type="text" id="qte_alerte" name="qte_alerte"

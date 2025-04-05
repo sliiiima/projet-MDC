@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nom');
             $table->text('description');
             $table->foreignId('type_medicament_id')->constraind();
-            $table->boolean('est_active');
+            // $table->boolean('est_active');
             $table->integer('qte_alerte');
             $table->integer('qte_initial');
             $table->timestamps();

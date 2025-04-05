@@ -14,7 +14,7 @@ class MedicamentController extends Controller
     {
         $medicaments = Medicament::all();
         return view("medicaments.index", compact("medicaments"));
-        
+
     }
 
     /**
@@ -23,7 +23,7 @@ class MedicamentController extends Controller
     public function create()
     {
         return view("medicaments.create");
-        
+
     }
 
     /**
@@ -35,7 +35,7 @@ class MedicamentController extends Controller
             "nom"=> $request->nom,
             "description"=> $request->description,
             "type_medicament_id"=> $request->type_medicament_id,
-            "Est_active"=>$request->est_active?true:false,
+            // "Est_active"=>$request->est_active?true:false,
             "qte_alerte"=>$request->qte_alerte,
             "qte_initial"=>$request->qte_initial,
         ]);
@@ -56,7 +56,7 @@ class MedicamentController extends Controller
     {
         $medicament = Medicament::findOrFail($id);
         return view("medicaments.modify", compact("medicament"));
-        
+
     }
 
     /**
@@ -68,7 +68,7 @@ class MedicamentController extends Controller
             "nom"=> $request->nom,
             "description"=> $request->description,
             "type_medicament_id"=> $request->type_medicament_id,
-            "Est_active"=>$request->est_active?true:false,
+            // "Est_active"=>$request->est_active?true:false,
             "qte_alerte"=>$request->qte_alerte,
             "qte_initial"=>$request->qte_initial,
         ]);
