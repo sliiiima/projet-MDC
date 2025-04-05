@@ -98,7 +98,7 @@
             </form>
         </div>
     </div>
-    @push('script')
+    @push('scripts')
         <script>
             let medicationCount = 0;
 
