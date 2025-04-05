@@ -147,79 +147,125 @@
             </tbody>
         </table>
     </div>
-    <div class="my-6 flex py-10">
-        <canvas id="genderChart"></canvas>
+    <div class="my-6 py-10">
+        <div class="bg-gray-100 rounded-lg ">
+            <div class="text-center bg-gradient-to-r from-pink-300 to-blue-500 p-6 rounded-t-lg text-white text-xl font-semibold">Genders</div>
+            <canvas id="genderChart" class="p-6"></canvas>
+        </div>
+        <br>
+        <div class="bg-gray-100 rounded-lg ">
+            <div class="text-center bg-gradient-to-r from-green-300 to-red-600 p-6 rounded-t-lg text-white text-xl font-semibold">Ordonnances</div>
+            <canvas id="ordonnancesChart" class="p-6"></canvas>
+        </div>
     </div>
     <!-- <button class="px-4 py-2 bg-red-500 hover:bg-red-300 rounded text-white">(6) vides</button> -->
     @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('genderChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['0-18', '19-45', '45+'],
-                    datasets: [
-                        {
-                            label: 'Girls',
-                            data: [-30, -20, -25], // Negative = left side
-                            backgroundColor: 'rgba(255, 99, 132, 0.7)',
-                            borderRadius: 7,
-                            categoryPercentage: 0.0000001, // Tighten group spacing
-                            barPercentage: 10000000,       // Widen bars
-                        },
-                        {
-                            label: 'Boys',
-                            data: [35, 28, 22], // Positive = right side
-                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                            borderRadius: 7,
-                            categoryPercentage: 0.0000001,
-                            barPercentage: 10000000,
-                        }
-                    ]
-                },
-                options: {
-                    indexAxis: 'y', // Horizontal bars
-                    responsive: true,
-                    scales: {
-                        x: {
-                            min: -50,
-                            max: 50,
-                            ticks: {
-                                callback: (value) => Math.abs(value), // Show absolute values
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const ctx = document.getElementById('genderChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jeun 0-18', 'Adult 19-45', 'vieu 45+'],
+                        datasets: [
+                            {
+                                label: 'Girls',
+                                data: [-30, -20, -25], // Negative = left side
+                                backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                                borderRadius: 7,
+                                categoryPercentage: 0.0000001, // Tighten group spacing
+                                barPercentage: 10000000,       // Widen bars
                             },
-                            title: {
-                                display: true,
-                                text: 'Population'
-                            },
-                            grid: {
-                                drawOnChartArea: true // Cleaner design
+                            {
+                                label: 'Boys',
+                                data: [35, 28, 22], // Positive = right side
+                                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                                borderRadius: 7,
+                                categoryPercentage: 0.0000001,
+                                barPercentage: 10000000,
                             }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Age Groups'
-                            },
-                            // offset: false, // Critical for alignment
-                            grid: {
-                                display: false // Hide vertical grid lines
-                            }
-                        }
+                        ]
                     },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: (ctx) => `${ctx.dataset.label}: ${Math.abs(ctx.raw)}`,
+                    options: {
+                        indexAxis: 'y', // Horizontal bars
+                        responsive: true,
+                        scales: {
+                            x: {
+                                min: -50,
+                                max: 50,
+                                ticks: {
+                                    callback: (value) => Math.abs(value), // Show absolute values
+                                },
+                                grid: {
+                                    drawOnChartArea: true // Cleaner design
+                                }
+                            },
+                            y: {
+                                // offset: false, // Critical for alignment
+                                grid: {
+                                    display: false // Hide vertical grid lines
+                                }
                             }
                         },
-                        legend: {
-                            position: 'top'
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => `${ctx.dataset.label}: ${Math.abs(ctx.raw)}`,
+                                }
+                            },
+                            legend: {
+                                position: 'top'
+                            }
                         }
                     }
-                }
+                });
+
+                const cctx = document.getElementById('ordonnancesChart').getContext('2d');
+                new Chart(cctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Completed', 'Incompleted'], // Single category for 2 bars
+                        datasets: [
+                            {
+                                // label: 'Completed',
+                                data: [40, 65], // Value for green bar
+                                backgroundColor: ['rgba(75, 192, 102, 0.8)','rgba(255, 99, 102, 0.8)'], // Green
+                                borderRadius: 5,
+                                barPercentage: 0.5
+                            },
+                            // {
+                            //     // label: 'Incompleted',
+                            //     data: [65], // Value for red bar
+                            //     backgroundColor: , // Red
+                            //     borderRadius: 5,
+                            //     barPercentage: 0.5 // Width of bars
+                            // }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false // Cleaner look
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    display: true
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
             });
-        });
-    </script>
+
+        </script>
     @endpush
 @endsection
