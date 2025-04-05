@@ -3,6 +3,22 @@
 @section('mini title', 'New Prescription')
 
 @section('content')
+@if($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show mb-4">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <div>
+                <h5 class="alert-heading mb-1">Validation Errors</h5>
+                <ul class="mb-0 ps-3">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
     <div class="bg-white shadow rounded-lg">
         <!-- <div class="px-4 py-5 sm:px-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900">New Prescription</h3>
@@ -40,27 +56,13 @@
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-
-                    <div class="sm:col-span-6">
-                        <label for="instructions" class="block text-sm font-medium text-gray-700">Instructions</label>
-                        <div class="mt-1">
-                            <textarea name="instructions" id="instructions" rows="3"
-                                class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md @error('instructions') border-red-500 @enderror">{{ old('instructions') }}</textarea>
-                        </div>
-                        @error('instructions')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
                     <div class="sm:col-span-3">
                         <label for="etat" class="block text-sm font-medium text-gray-700">Status</label>
                         <div class="mt-1">
                             <select name="etat" id="etat"
                                 class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md @error('etat') border-red-500 @enderror">
-                                <option value="incompleted" {{ old('etat') == 'incompleted' ? 'selected' : '' }}>Incompleted
-                                </option>
-                                <option value="completed" {{ old('etat') == 'completed' ? 'selected' : '' }}>Completed
-                                </option>
+                                <option value="incompleted" {{ old('etat') == 'incompleted' ? 'selected' : '' }}>Incompleted</option>
+                                <option value="completed" {{ old('etat') == 'completed' ? 'selected' : '' }}>Completed</option>
                             </select>
                         </div>
                         @error('etat')
@@ -118,7 +120,7 @@
                         </div>
                         <div class="sm:col-span-2">
                             <label class="block text-sm font-medium text-gray-700">Quantity</label>
-                            <input type="number" name="medicaments[${medicationCount}][qte_donnee]" min="1" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <input type="number" name="medicaments[${medicationCount}][quantite]" min="1" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                         </div>
                         <div class="sm:col-span-6 flex justify-end">
                             <button type="button" onclick="this.closest('.grid').remove()" class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">

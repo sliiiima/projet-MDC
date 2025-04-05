@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('medicament_id')->constraind();
             $table->integer('qte_donnee');
-            $table->text('commentaire');
+            $table->text('commentaire')->nullable();
             $table->foreignId('ordonnance_id')->constraind();
             $table->timestamps();
         });

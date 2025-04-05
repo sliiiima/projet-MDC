@@ -25,22 +25,17 @@
             </div>
             <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">Date</dt>
-                <dd class="mt-1 text-sm text-gray-900">{{ $ordonnance->date_ordonnance->format('d/m/Y') }}</dd>
+                <dd class="mt-1 text-sm text-gray-900">{{ $ordonnance->date_donnee}}</dd>
             </div>
             <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">Status</dt>
                 <dd class="mt-1 text-sm">
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                        @if($ordonnance->statut === 'active') bg-green-100 text-green-800
-                        @elseif($ordonnance->statut === 'completed') bg-gray-100 text-gray-800
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                        @if($ordonnance->etat) bg-green-100 text-green-800
                         @else bg-red-100 text-red-800 @endif">
-                        {{ ucfirst($ordonnance->statut) }}
+                        {{ ucfirst($ordonnance->etat?'Completed':'Incomplited') }}
                     </span>
                 </dd>
-            </div>
-            <div class="sm:col-span-2">
-                <dt class="text-sm font-medium text-gray-500">Instructions</dt>
-                <dd class="mt-1 text-sm text-gray-900">{{ $ordonnance->instructions ?: 'No instructions provided.' }}</dd>
             </div>
         </dl>
     </div>
@@ -58,27 +53,20 @@
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($ordonnance->ordonnanceMedicaments as $ordonnanceMedicament)
+                    @forelse($ordonnance->detailMedicaments as $detailMedicament)
+                    {{-- @dd($detailMedicament) --}}
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $ordonnanceMedicament->medicament->nom }}
+                                {{ $detailMedicament->medicament->nom }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $ordonnanceMedicament->medicament->typeMedicament->nom }}
+                                {{ $detailMedicament->medicament->type->nom_type }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $ordonnanceMedicament->quantite }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                €{{ number_format($ordonnanceMedicament->medicament->prix, 2) }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                €{{ number_format($ordonnanceMedicament->medicament->prix * $ordonnanceMedicament->quantite, 2) }}
+                                {{ $detailMedicament->qte_donnee }}
                             </td>
                         </tr>
                     @empty
@@ -89,18 +77,8 @@
                         </tr>
                     @endforelse
                 </tbody>
-                <tfoot class="bg-gray-50">
-                    <tr>
-                        <td colspan="4" class="px-6 py-3 text-right text-sm font-medium text-gray-500">Total Amount:</td>
-                        <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
-                            €{{ number_format($ordonnance->ordonnanceMedicaments->sum(function($item) {
-                                return $item->medicament->prix * $item->quantite;
-                            }), 2) }}
-                        </td>
-                    </tr>
-                </tfoot>
             </table>
         </div>
     </div>
 </div>
-@endsection 
+@endsection

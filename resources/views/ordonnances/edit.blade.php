@@ -38,17 +38,6 @@
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
-
-                <div class="sm:col-span-6">
-                    <label for="instructions" class="block text-sm font-medium text-gray-700">Instructions</label>
-                    <div class="mt-1">
-                        <textarea name="instructions" id="instructions" rows="3" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md @error('instructions') border-red-500 @enderror">{{ old('instructions', $ordonnance->instructions) }}</textarea>
-                    </div>
-                    @error('instructions')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 <div class="sm:col-span-3">
                     <label for="statut" class="block text-sm font-medium text-gray-700">Status</label>
                     <div class="mt-1">
@@ -133,4 +122,4 @@
     });
 </script>
 @endpush
-@endsection 
+@endsection

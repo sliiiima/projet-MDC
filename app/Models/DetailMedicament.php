@@ -12,7 +12,7 @@ class DetailMedicament extends Model
 
     public function medicament()
     {
-        return $this->belongsTo(Medicament::class, 'medicament_id');
+        return $this->belongsTo(Medicament::class);
     }
 
     public function ordonnance()

@@ -18,7 +18,7 @@ class Medicament extends Model
 
     public function detailMedicaments()
     {
-        return $this->hasMany(DetailMedicament::class, 'medicament_id');
+        return $this->hasMany(DetailMedicament::class);
     }
 
     public function fournisseurs()

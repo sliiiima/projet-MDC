@@ -43,21 +43,19 @@ class OrdonnanceController extends Controller
             'medicaments' => 'required|array',
             'medicaments.*.id' => 'required|exists:medicaments,id',
             'medicaments.*.quantite' => 'required|integer|min:1',
-            'instructions' => 'nullable|string|max:1000',
             'etat' => 'required|in:completed,incompleted'
         ]);
 
         $ordonnance = Ordonnance::create([
             'patient_id' => $request->patient_id,
             'date_donnee' => $request->date_donnee,
-            'instructions' => $request->instructions,
             'etat' => $request->etat == 'completed' ? true : false,
         ]);
 
         foreach ($request->medicaments as $medicament) {
             $ordonnance->detailMedicaments()->create([
                 'medicament_id' => $medicament['id'],
-                'qte_donnee' => $medicament['qte_donnee']
+                'qte_donnee' => $medicament['quantite']
             ]);
         }
 
@@ -70,8 +68,7 @@ class OrdonnanceController extends Controller
      */
     public function show(Ordonnance $ordonnance)
     {
-        $ordonnance->load(['patient', 'ordonnanceMedicaments.medicament']);
-
+        $ordonnance->load(['patient', 'detailMedicaments.medicament']);
         return view('ordonnances.show', compact('ordonnance'));
     }
 
@@ -82,7 +79,7 @@ class OrdonnanceController extends Controller
     {
         $patients = Patient::orderBy('nom')->get();
         $medicaments = Medicament::orderBy('nom')->get();
-        $ordonnance->load('ordonnanceMedicaments');
+        $ordonnance->load('detailMedicaments');
 
         return view('ordonnances.edit', compact('ordonnance', 'patients', 'medicaments'));
     }
@@ -110,11 +107,11 @@ class OrdonnanceController extends Controller
         ]);
 
         // Delete existing medications
-        $ordonnance->ordonnanceMedicaments()->delete();
+        $ordonnance->detailMedicaments()->delete();
 
         // Add new medications
         foreach ($request->medicaments as $medicament) {
-            $ordonnance->ordonnanceMedicaments()->create([
+            $ordonnance->detailMedicaments()->create([
                 'medicament_id' => $medicament['id'],
                 'quantite' => $medicament['quantite']
             ]);
@@ -129,7 +126,7 @@ class OrdonnanceController extends Controller
      */
     public function destroy(Ordonnance $ordonnance)
     {
-        $ordonnance->ordonnanceMedicaments()->delete();
+        $ordonnance->detailMedicaments()->delete();
         $ordonnance->delete();
 
         return redirect()->route('ordonnances.index')
