@@ -147,13 +147,12 @@
             </tbody>
         </table>
     </div>
-    <div class="my-6 py-10">
+    <div class="my-6 grid grid-cols-2 py-10 gap-5">
         <div class="bg-gray-100 rounded-lg ">
             <div class="text-center bg-gradient-to-r from-pink-300 to-blue-500 p-6 rounded-t-lg text-white text-xl font-semibold">Genders</div>
             <canvas id="genderChart" class="p-6"></canvas>
         </div>
-        <br>
-        <div class="bg-gray-100 rounded-lg ">
+        <div class="bg-gray-100 rounded-lg">
             <div class="text-center bg-gradient-to-r from-green-300 to-red-600 p-6 rounded-t-lg text-white text-xl font-semibold">Ordonnances</div>
             <canvas id="ordonnancesChart" class="p-6"></canvas>
         </div>
@@ -214,7 +213,8 @@
                                 }
                             },
                             legend: {
-                                position: 'top'
+                                position: 'top',
+                                display: false
                             }
                         }
                     }
