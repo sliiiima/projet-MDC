@@ -66,38 +66,6 @@
         </div>
     </div>
 
-    <!-- Recent Activity -->
-    <div class="bg-white shadow rounded-lg">
-        <div class="px-4 py-5 sm:px-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">Recent Activity</h3>
-        </div>
-        <div class="border-t border-gray-200">
-            <ul class="divide-y divide-gray-200">
-                @forelse($recentActivity ?? [] as $activity)
-                    <li class="px-4 py-4 sm:px-6">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm font-medium text-gray-900">{{ $activity->description }}</p>
-                                    <p class="text-sm text-gray-500">{{ $activity->created_at->diffForHumans() }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                @empty
-                    <li class="px-4 py-4 sm:px-6">
-                        <p class="text-sm text-gray-500">No recent activity</p>
-                    </li>
-                @endforelse
-            </ul>
-        </div>
-    </div>
     <div class="grid grid-cols-2 gap-5">
         <table class="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
             <thead>
