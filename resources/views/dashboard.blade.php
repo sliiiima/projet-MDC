@@ -102,7 +102,9 @@
         <table class="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
             <thead>
                 <tr>
-                    <th colspan="3" class="px-6 py-4 text-xl font-semibold text-center text-white bg-green-500">medicament ({{ \App\Models\Medicament::where('qte_initial','<',\DB::raw('qte_alerte'),'and')->where('qte_initial','>',0)->count() }})</th>
+                    <th colspan="3" class="px-6 py-4 text-xl font-semibold text-center text-white bg-green-500">medicament
+                        ({{ \App\Models\Medicament::where('qte_initial', '<', \DB::raw('qte_alerte'), 'and')->where('qte_initial', '>', 0)->count() }})
+                    </th>
                 </tr>
                 <tr>
                     <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 bg-gray-100">medicament</th>
@@ -111,12 +113,12 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (\App\Models\Medicament::where('qte_initial','<',\DB::raw('qte_alerte'),'and')->where('qte_initial','>',0)->get() as $medicament)
-                <tr class="border-t hover:bg-gray-50">
-                    <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->nom}}</td>
-                    <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->qte_alerte}}</td>
-                    <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->qte_initial}}</td>
-                </tr>
+                @foreach (\App\Models\Medicament::where('qte_initial', '<', \DB::raw('qte_alerte'), 'and')->where('qte_initial', '>', 0)->get() as $medicament)
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->nom}}</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->qte_alerte}}</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->qte_initial}}</td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
@@ -125,7 +127,8 @@
         <table class="min-w-full table-auto border-collapse bg-white shadow-lg rounded-lg overflow-hidden">
             <thead>
                 <tr>
-                    <th colspan="3" class="px-6 py-4 text-xl font-semibold text-center text-white bg-red-500">medicament ({{ \App\Models\Medicament::where('qte_initial','=',0)->count() }})</th>
+                    <th colspan="3" class="px-6 py-4 text-xl font-semibold text-center text-white bg-red-500">medicament
+                        ({{ \App\Models\Medicament::where('qte_initial', '=', 0)->count() }})</th>
                 </tr>
                 <tr>
                     <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 bg-gray-100">medicament</th>
@@ -134,15 +137,89 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (\App\Models\Medicament::where('qte_initial','=',0)->get() as $medicament)
-                <tr class="border-t hover:bg-gray-50">
-                    <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->nom}}</td>
-                    <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->qte_alerte}}</td>
-                    <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->qte_initial}}</td>
-                </tr>
+                @foreach (\App\Models\Medicament::where('qte_initial', '=', 0)->get() as $medicament)
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->nom}}</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->qte_alerte}}</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">{{$medicament->qte_initial}}</td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
+    <div class="my-6 flex py-10">
+        <canvas id="genderChart"></canvas>
+    </div>
     <!-- <button class="px-4 py-2 bg-red-500 hover:bg-red-300 rounded text-white">(6) vides</button> -->
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('genderChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['0-18', '19-45', '45+'],
+                    datasets: [
+                        {
+                            label: 'Girls',
+                            data: [-30, -20, -25], // Negative = left side
+                            backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                            borderRadius: 7,
+                            categoryPercentage: 0.0000001, // Tighten group spacing
+                            barPercentage: 10000000,       // Widen bars
+                        },
+                        {
+                            label: 'Boys',
+                            data: [35, 28, 22], // Positive = right side
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                            borderRadius: 7,
+                            categoryPercentage: 0.0000001,
+                            barPercentage: 10000000,
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y', // Horizontal bars
+                    responsive: true,
+                    scales: {
+                        x: {
+                            min: -50,
+                            max: 50,
+                            ticks: {
+                                callback: (value) => Math.abs(value), // Show absolute values
+                            },
+                            title: {
+                                display: true,
+                                text: 'Population'
+                            },
+                            grid: {
+                                drawOnChartArea: true // Cleaner design
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Age Groups'
+                            },
+                            // offset: false, // Critical for alignment
+                            grid: {
+                                display: false // Hide vertical grid lines
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: ${Math.abs(ctx.raw)}`,
+                            }
+                        },
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    @endpush
 @endsection
