@@ -42,7 +42,7 @@ class OrdonnanceController extends Controller
             'date_donnee' => 'required|date',
             'medicaments' => 'required|array',
             'medicaments.*.id' => 'required|exists:medicaments,id',
-            'medicaments.*.quantite' => 'required|integer|min:1',
+            'medicaments.*.qte_donnee' => 'required|integer|min:1',
             'etat' => 'required|in:completed,incompleted'
         ]);
 
@@ -55,7 +55,7 @@ class OrdonnanceController extends Controller
         foreach ($request->medicaments as $medicament) {
             $ordonnance->detailMedicaments()->create([
                 'medicament_id' => $medicament['id'],
-                'qte_donnee' => $medicament['quantite']
+                'qte_donnee' => $medicament['qte_donnee']
             ]);
         }
 
@@ -91,19 +91,17 @@ class OrdonnanceController extends Controller
     {
         $request->validate([
             'patient_id' => 'required|exists:patients,id',
-            'date_ordonnance' => 'required|date',
+            'date_donnee' => 'required|date',
             'medicaments' => 'required|array',
             'medicaments.*.id' => 'required|exists:medicaments,id',
-            'medicaments.*.quantite' => 'required|integer|min:1',
-            'instructions' => 'nullable|string|max:1000',
-            'statut' => 'required|in:active,completed,cancelled'
+            'medicaments.*.qte_donnee' => 'required|integer|min:1',
+            'etat' => 'required|in:completed,incompleted'
         ]);
 
         $ordonnance->update([
             'patient_id' => $request->patient_id,
-            'date_ordonnance' => $request->date_ordonnance,
-            'instructions' => $request->instructions,
-            'statut' => $request->statut
+            'date_donnee' => $request->date_donnee,
+            'etat' => $request->etat == 'completed' ? true : false,
         ]);
 
         // Delete existing medications
@@ -113,11 +111,11 @@ class OrdonnanceController extends Controller
         foreach ($request->medicaments as $medicament) {
             $ordonnance->detailMedicaments()->create([
                 'medicament_id' => $medicament['id'],
-                'quantite' => $medicament['quantite']
+                'qte_donnee' => $medicament['qte_donnee']
             ]);
         }
 
-        return redirect()->route('ordonnances.show', $ordonnance)
+        return redirect()->route('ordonnances.index', $ordonnance)
             ->with('success', 'Prescription updated successfully.');
     }
 

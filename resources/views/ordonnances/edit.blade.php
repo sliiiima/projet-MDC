@@ -30,24 +30,23 @@
                 </div>
 
                 <div class="sm:col-span-3">
-                    <label for="date_ordonnance" class="block text-sm font-medium text-gray-700">Date</label>
+                    <label for="date_donnee" class="block text-sm font-medium text-gray-700">Date</label>
                     <div class="mt-1">
-                        <input type="date" name="date_ordonnance" id="date_ordonnance" value="{{ old('date_ordonnance', $ordonnance->date_ordonnance->format('Y-m-d')) }}" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md @error('date_ordonnance') border-red-500 @enderror">
+                        <input type="date" name="date_donnee" id="date_donnee" value="{{ old('date_donnee', $ordonnance->date_donnee) }}" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md @error('date_donnee') border-red-500 @enderror">
                     </div>
-                    @error('date_ordonnance')
+                    @error('date_donnee')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="sm:col-span-3">
-                    <label for="statut" class="block text-sm font-medium text-gray-700">Status</label>
+                    <label for="etat" class="block text-sm font-medium text-gray-700">Status</label>
                     <div class="mt-1">
-                        <select name="statut" id="statut" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md @error('statut') border-red-500 @enderror">
-                            <option value="active" {{ old('statut', $ordonnance->statut) == 'active' ? 'selected' : '' }}>Active</option>
-                            <option value="completed" {{ old('statut', $ordonnance->statut) == 'completed' ? 'selected' : '' }}>Completed</option>
-                            <option value="cancelled" {{ old('statut', $ordonnance->statut) == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                        <select name="etat" id="etat" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md @error('etat') border-red-500 @enderror">
+                            <option value="completed" {{ old('etat', $ordonnance->etat) == true? 'selected' : '' }}>Completed</option>
+                            <option value="incompleted" {{ old('etat', $ordonnance->etat) == false? 'selected' : '' }}>Incompleted</option>
                         </select>
                     </div>
-                    @error('statut')
+                    @error('etat')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
@@ -84,7 +83,7 @@
 <script>
     let medicationCount = 0;
 
-    function addMedication(medicamentId = '', quantite = '') {
+    function addMedication(medicamentId = '', qte_donnee = '') {
         const container = document.getElementById('medications-container');
         const row = document.createElement('div');
         row.className = 'grid grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-6 items-end';
@@ -102,7 +101,7 @@
             </div>
             <div class="sm:col-span-2">
                 <label class="block text-sm font-medium text-gray-700">Quantity</label>
-                <input type="number" name="medicaments[${medicationCount}][quantite]" min="1" value="${quantite}" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                <input type="number" name="medicaments[${medicationCount}][qte_donnee]" min="1" value="${qte_donnee}" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
             </div>
             <div class="sm:col-span-6 flex justify-end">
                 <button type="button" onclick="this.closest('.grid').remove()" class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
@@ -116,8 +115,8 @@
 
     // Add existing medications
     document.addEventListener('DOMContentLoaded', function() {
-        @foreach($ordonnance->ordonnanceMedicaments as $ordonnanceMedicament)
-            addMedication('{{ $ordonnanceMedicament->medicament_id }}', '{{ $ordonnanceMedicament->quantite }}');
+        @foreach($ordonnance->detailMedicaments as $detailMedicament)
+            addMedication('{{ $detailMedicament->medicament_id }}', '{{ $detailMedicament->qte_donnee }}');
         @endforeach
     });
 </script>
